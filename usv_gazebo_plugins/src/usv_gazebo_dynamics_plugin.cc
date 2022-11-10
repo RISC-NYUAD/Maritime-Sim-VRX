@@ -282,11 +282,15 @@ void UsvDynamicsPlugin::Update()
   // Forces in fixed frame
   ROS_DEBUG_STREAM_THROTTLE(1.0, "forceSum :\n" << kForceSum);
 
-  // Add dynamic forces/torques to link at CG
-  this->link->AddRelativeForce(
-    ignition::math::Vector3d(kForceSum(0), kForceSum(1), kForceSum(2)));
-  this->link->AddRelativeTorque(
-    ignition::math::Vector3d(kForceSum(3), kForceSum(4), kForceSum(5)));
+  if(( kPose.Pos().Z() - (this->waterLevel) ) < 0.3){
+	  // Add dynamic forces/torques to link at CG
+	  this->link->AddRelativeForce(
+		ignition::math::Vector3d(kForceSum(0), kForceSum(1), kForceSum(2)));
+	  this->link->AddRelativeTorque(
+		ignition::math::Vector3d(kForceSum(3), kForceSum(4), kForceSum(5)));
+  }
+
+
 
   // Loop over boat grid points
   // Grid point location in boat frame - might be able to precalculate these?
